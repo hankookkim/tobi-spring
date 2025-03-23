@@ -1,22 +1,31 @@
 package com.example.tobi.test;
 
-import com.example.tobi.dao.ConnectionMaker;
-import com.example.tobi.dao.DConnectionMaker;
-import com.example.tobi.dao.NConnectionMaker;
-import com.example.tobi.dao.UserDao;
+import com.example.tobi.dao.*;
 import com.example.tobi.domain.User;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.sql.SQLException;
 
 public class UserDaoTest {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        ConnectionMaker connectionMaker = new DConnectionMaker();
-//        ConnectionMaker connectionMaker = new NConnectionMaker();
 
-        UserDao dao = new UserDao(connectionMaker);
+        ApplicationContext context= new AnnotationConfigApplicationContext(DaoFactory.class);
+        UserDao userDao = (UserDao) context.getBean("userDao");
+
+        UserDao dao3= context.getBean("userDao", UserDao.class);
+        UserDao dao4= context.getBean("userDao", UserDao.class);
+
+        System.out.println(dao3);
+        System.out.println(dao4);
+
+
+
+        UserDao dao=new DaoFactory().userDao();
 
         User user =new User();
-        user.setId("whiteship");
+        user.setId("whiteshi");
         user.setName("김한국");
         user.setPassword("married");
 

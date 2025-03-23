@@ -1,21 +1,18 @@
 package com.example.tobi.dao;
 
 import com.example.tobi.domain.User;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.*;
 
 public class UserDao {
 
-//    private SimpleConnectionMaker simpleConnectionMaker;
+
     private ConnectionMaker connectionMaker;
 
-//    public UserDao() {
-//        simpleConnectionMaker = new SimpleConnectionMaker();
-//    }
-
-//    public UserDao(){
-//        connectionMaker= new DConnectionMaker();
-//    }
+    public void setConnectionMaker(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
 
     public UserDao(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
@@ -67,6 +64,17 @@ public class UserDao {
         Connection c=DriverManager.getConnection("jdbc:mysql://localhost:3306/java2_basic?serverTimezone=UTC&useSSL=false&characterEncoding=UTF-8","root","1234");
         return c;
     }
+
+//    public UserDao(){
+//        DaoFactory daoFactory=new DaoFactory();
+//        this.connectionMaker=daoFactory.connectionMaker();
+//    }
+    public UserDao(){
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        this.connectionMaker = context.getBean("ConnectionMaker", ConnectionMaker.class);
+
+    }
+
 
 
 }
