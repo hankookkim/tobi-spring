@@ -1,18 +1,18 @@
 package com.example.tobi.dao;
 
 import com.example.tobi.domain.User;
+import lombok.Setter;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
+@Setter
 public class UserDao {
+    private DataSource dataSource;
 
 
     private ConnectionMaker connectionMaker;
-
-    public void setConnectionMaker(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
-    }
 
     public UserDao(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
@@ -23,7 +23,7 @@ public class UserDao {
     public void add(User user) throws ClassNotFoundException, SQLException {
 
 //        Connection c= simpleConnectionMaker.makeNewConnection();
-        Connection c = connectionMaker.makeConnection();
+        Connection c = dataSource.getConnection();
         PreparedStatement ps=c.prepareStatement(
                 "insert into users (id, name, password)values(?,?,?)");
         ps.setString(1, user.getId());
